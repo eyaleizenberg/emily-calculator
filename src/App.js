@@ -9,6 +9,18 @@ import Slider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Slide from "@mui/material/Slide";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+const correctText = "!כל הכבוד";
+const wrongText = ".לא נכון. בואו ננסה שוב";
 
 const theme = createTheme({
   palette: {
@@ -30,8 +42,9 @@ class App extends React.Component {
     num2Max: 10,
     answer: "",
     currentOperator: "+",
-    isCorrect: undefined,
+    isCorrect: false,
     operators: ["+"],
+    isOpen: false,
   };
 
   pickNumber = (max) => Math.floor(Math.random() * max);
@@ -43,6 +56,13 @@ class App extends React.Component {
       num2: this.pickNumber(num2Max + 1),
       currentOperator: operators[this.pickNumber(operators.length)],
       answer: "",
+      isOpen: false,
+    });
+  };
+
+  showAnswer = () => {
+    this.setState({
+      answer: this.compute(),
     });
   };
 
@@ -66,12 +86,10 @@ class App extends React.Component {
   };
 
   checkAnswer = () => {
-    const { answer } = this.state;
-    if (this.compute() === parseInt(answer)) {
-      alert("נכון!");
-    } else {
-      alert("לא נכון");
-    }
+    this.setState({
+      isOpen: true,
+      isCorrect: this.compute() === parseInt(this.state.answer),
+    });
   };
 
   onAnswerChange = (event) => {
@@ -98,12 +116,40 @@ class App extends React.Component {
     }
   };
 
+  handleClose = () => {
+    this.setState({
+      isOpen: false,
+    });
+  };
+
   render() {
-    const { num1, num2, num1Max, num2Max, operators, currentOperator } =
-      this.state;
+    const {
+      num1,
+      num2,
+      num1Max,
+      num2Max,
+      operators,
+      currentOperator,
+      isOpen,
+      isCorrect,
+    } = this.state;
     return (
       <ThemeProvider theme={theme}>
         <Container maxWidth={"99vh"} sx={{ marginTop: "2vh" }}>
+          <Dialog
+            open={isOpen}
+            TransitionComponent={Transition}
+            keepMounted
+            aria-describedby="alert-dialog-slide-description"
+          >
+            <DialogContent>
+              <DialogTitle>{isCorrect ? correctText : wrongText}</DialogTitle>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose}>סגור</Button>
+              <Button onClick={this.newGame}>תרגיל חדש</Button>
+            </DialogActions>
+          </Dialog>
           <div className="excerciseContainer">
             <TextField
               label="מספר ראשון"
@@ -173,6 +219,7 @@ class App extends React.Component {
           <hr />
           <ButtonGroup variant="contained">
             <Button onClick={this.newGame}>חדש</Button>
+            <Button onClick={this.showAnswer}>חשוף תשובה</Button>
             <Button onClick={this.checkAnswer}>בדוק</Button>
           </ButtonGroup>
         </Container>
