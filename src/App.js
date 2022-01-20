@@ -199,6 +199,7 @@ class App extends React.Component {
               variant="outlined"
               value={this.state.answer}
               sx={{ width: "10vh" }}
+              type="number"
             />
           </div>
           <hr />
