@@ -7,7 +7,8 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import Slider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
-// *9506 moked corona
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 const theme = createTheme({
   palette: {
@@ -28,22 +29,45 @@ class App extends React.Component {
     num2: 3,
     num2Max: 10,
     answer: "",
+    currentOperator: "+",
     isCorrect: undefined,
+    operators: ["+"],
   };
 
-  pickNumber = (max) => Math.floor(Math.random() * (max + 1));
+  pickNumber = (max) => Math.floor(Math.random() * max);
 
   newGame = () => {
+    const { num1Max, num2Max, operators } = this.state;
     this.setState({
-      num1: this.pickNumber(this.state.num1Max),
-      num2: this.pickNumber(this.state.num2Max),
+      num1: this.pickNumber(num1Max + 1),
+      num2: this.pickNumber(num2Max + 1),
+      currentOperator: operators[this.pickNumber(operators.length)],
       answer: "",
     });
   };
 
+  compute = () => {
+    const { num1, num2, currentOperator } = this.state;
+    if (currentOperator === "+") {
+      return num1 + num2;
+    }
+
+    if (currentOperator === "-") {
+      return num1 - num2;
+    }
+
+    if (currentOperator === "×") {
+      return num1 * num2;
+    }
+
+    if (currentOperator === "÷") {
+      return num1 / num2;
+    }
+  };
+
   checkAnswer = () => {
-    const { num1, num2, answer } = this.state;
-    if (num1 + num2 == answer) {
+    const { answer } = this.state;
+    if (this.compute() === parseInt(answer)) {
       alert("נכון!");
     } else {
       alert("לא נכון");
@@ -68,8 +92,15 @@ class App extends React.Component {
     });
   };
 
+  onToggleChange = (_event, newOperators) => {
+    if (newOperators.length) {
+      this.setState({ operators: newOperators });
+    }
+  };
+
   render() {
-    const { num1, num2, num1Max, num2Max } = this.state;
+    const { num1, num2, num1Max, num2Max, operators, currentOperator } =
+      this.state;
     return (
       <ThemeProvider theme={theme}>
         <Container maxWidth={"99vh"} sx={{ marginTop: "2vh" }}>
@@ -86,7 +117,7 @@ class App extends React.Component {
               InputProps={{
                 readOnly: true,
               }}
-              value={"+"}
+              value={currentOperator}
               sx={{ width: "5vh" }}
             />
             <TextField
@@ -107,22 +138,38 @@ class App extends React.Component {
             />
           </div>
           <hr />
-          <Typography id="input-slider" gutterBottom>
-            ערך מקסימילי מספר ראשון
-          </Typography>
+          <Typography>ערך מקסימילי מספר ראשון</Typography>
           <Slider
             value={num1Max}
             valueLabelDisplay="auto"
             onChange={this.onNum1MaxChange}
           />
-          <Typography id="input-slider" gutterBottom>
-            ערך מקסימלי מספר שני
-          </Typography>
+          <Typography>ערך מקסימלי מספר שני</Typography>
           <Slider
             value={num2Max}
             valueLabelDisplay="auto"
             onChange={this.onNum2MaxChange}
           />
+          <hr />
+          <Typography>סוגי פעולות</Typography>
+          <ToggleButtonGroup
+            value={operators}
+            onChange={this.onToggleChange}
+            size="large"
+          >
+            <ToggleButton value="+" sx={{ padding: "15px 20px" }}>
+              +
+            </ToggleButton>
+            <ToggleButton value="-" sx={{ padding: "15px 20px" }}>
+              -
+            </ToggleButton>
+            <ToggleButton value="×" sx={{ padding: "15px 20px" }}>
+              ×
+            </ToggleButton>
+            <ToggleButton value="÷" sx={{ padding: "15px 20px" }}>
+              ÷
+            </ToggleButton>
+          </ToggleButtonGroup>
           <hr />
           <ButtonGroup variant="contained">
             <Button onClick={this.newGame}>חדש</Button>
