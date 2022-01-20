@@ -19,8 +19,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const correctText = "!כל הכבוד";
-const wrongText = ".לא נכון. בואו ננסה שוב";
+const correctText = "😁 !כל הכבוד";
+const wrongText = "🤔 .לא נכון. בואו ננסה שוב";
 
 const theme = createTheme({
   palette: {
@@ -51,10 +51,28 @@ class App extends React.Component {
 
   newGame = () => {
     const { num1Max, num2Max, operators } = this.state;
+    const currentOperator = operators[this.pickNumber(operators.length)];
+    const num1 = this.pickNumber(num1Max + 1);
+    let num2;
+
+    if (currentOperator === "-") {
+      num2 = this.pickNumber(num1 + 1);
+    } else if (currentOperator === "÷" && num1) {
+      const possibleNumbers = [];
+      for (let i = 1; i < num1 + 1; i++) {
+        if (!(num1 % i)) {
+          possibleNumbers.push(i);
+        }
+      }
+      num2 = possibleNumbers[this.pickNumber(possibleNumbers.length)];
+    } else {
+      num2 = this.pickNumber(num2Max + 1);
+    }
+
     this.setState({
-      num1: this.pickNumber(num1Max + 1),
-      num2: this.pickNumber(num2Max + 1),
-      currentOperator: operators[this.pickNumber(operators.length)],
+      num1,
+      num2,
+      currentOperator,
       answer: "",
       isOpen: false,
     });
