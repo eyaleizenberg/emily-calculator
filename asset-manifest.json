@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/emily-calculator/static/css/main.8e2d6f09.css",
+    "main.js": "/emily-calculator/static/js/main.367dcfeb.js",
+    "static/js/787.20ca43bd.chunk.js": "/emily-calculator/static/js/787.20ca43bd.chunk.js",
+    "index.html": "/emily-calculator/index.html",
+    "main.8e2d6f09.css.map": "/emily-calculator/static/css/main.8e2d6f09.css.map",
+    "main.367dcfeb.js.map": "/emily-calculator/static/js/main.367dcfeb.js.map",
+    "787.20ca43bd.chunk.js.map": "/emily-calculator/static/js/787.20ca43bd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8e2d6f09.css",
+    "static/js/main.367dcfeb.js"
+  ]
+}
