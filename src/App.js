@@ -201,6 +201,7 @@ class App extends React.Component {
               variant="outlined"
               value={this.state.answer}
               type="number"
+              inputProps={{ inputMode: "numeric" }}
               sx={{ marginLeft: "5px" }}
             />
           </div>
