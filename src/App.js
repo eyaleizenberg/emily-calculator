@@ -153,7 +153,7 @@ class App extends React.Component {
     } = this.state;
     return (
       <ThemeProvider theme={theme}>
-        <Container maxWidth={"99vh"} sx={{ marginTop: "2vh" }}>
+        <Container maxWidth="md" sx={{ marginTop: "2vh" }}>
           <Dialog
             open={isOpen}
             TransitionComponent={Transition}
@@ -175,22 +175,24 @@ class App extends React.Component {
                 readOnly: true,
               }}
               value={num1}
-              sx={{ width: "10vh" }}
+              sx={{ marginRight: "5px" }}
             />
-            <TextField
-              InputProps={{
-                readOnly: true,
-              }}
-              value={currentOperator}
-              sx={{ width: "5vh" }}
-            />
+            <div>
+              <TextField
+                InputProps={{
+                  readOnly: true,
+                }}
+                value={currentOperator}
+                sx={{ width: "40px", marginRight: "5px" }}
+              />
+            </div>
             <TextField
               label="מספר שני"
               InputProps={{
                 readOnly: true,
               }}
               value={num2}
-              sx={{ width: "10vh" }}
+              sx={{ marginRight: "5px" }}
             />
             <div>=</div>
             <TextField
@@ -198,8 +200,8 @@ class App extends React.Component {
               onChange={this.onAnswerChange}
               variant="outlined"
               value={this.state.answer}
-              sx={{ width: "10vh" }}
               type="number"
+              sx={{ marginLeft: "5px" }}
             />
           </div>
           <hr />
